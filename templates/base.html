@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Puls Musikkverksted – Påmelding</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="theme-color" content="#ff6a3d">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="brand">
+          {# Try to show uploaded logo from /img if present #}
+          <picture class="logo-wrap">
+            <img id="puls-logo" src="{{ url_for('image_assets', filename='logo.png') }}" alt="Puls Musikkverksted" onerror="this.style.display='none'">
+          </picture>
+          <div class="logo-circle" aria-hidden="true"></div>
+          <h1>Puls Musikkverksted</h1>
+        </div>
+        <p class="subtitle">Påmelding til ungdomsarrangement</p>
+      </div>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© {{ 2025 }} Puls Musikkverksted · Personvern: Opplysningene lagres i inntil 60 dager og brukes kun til trygg gjennomføring.</small>
+      </div>
+    </footer>
+    <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+  </body>
+</html>

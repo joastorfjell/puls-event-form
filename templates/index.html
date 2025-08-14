@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>Meld deg på</h2>
+  <div class="event-info">
+    <p>
+      Velkommen til ungdomskveld på Puls Musikkverksted! Buss går fra <strong>Amfi Narvik</strong> kl.
+      <strong>17:15</strong> til Puls Musikkverksted. Retur kl. <strong>21:00</strong> og <strong>23:00</strong>.
+    </p>
+    <ul>
+      <li>Aldersgrupper: <strong>6–14 år</strong> (kl. 18–21) og <strong>10–14 år</strong> (kl. 21–23)</li>
+      <li>Sted: Puls Musikkverksted, Ballangen</li>
+      <li>Ta kontakt ved behov for tilrettelegging eller allergier</li>
+    </ul>
+  </div>
+  <form method="post" action="{{ url_for('submit') }}" class="grid">
+    <fieldset class="span-2">
+      <legend>Deltakerinfo</legend>
+      <label>Fullt navn*<input type="text" name="participant_name" required></label>
+      <label>Alder* (6–14)<input type="number" name="age" min="6" max="14" required></label>
+      <label>Mobilnummer*<input type="tel" name="phone" required></label>
+      <label>E‑post<input type="email" name="email"></label>
+      <label>Skole<input type="text" name="school"></label>
+      {# Kommune fjernet #}
+    </fieldset>
+
+    <fieldset class="span-2">
+      <legend>Transport</legend>
+      <p class="help">Buss går fra <strong>Amfi Narvik</strong> kl. <strong>17:15</strong> til Puls Musikkverksted. Retur kl. <strong>21:00</strong> og <strong>23:00</strong>.</p>
+      <label>Avreisested*
+        <select name="departure_from" required>
+          <option value="">Velg…</option>
+          <option>Amfi Narvik</option>
+          <option>Kommer selv</option>
+        </select>
+      </label>
+      <label>Retur med buss*
+        <select name="return_bus" required>
+          <option value="">Velg…</option>
+          <option>Ja</option>
+          <option>Nei</option>
+          <option>Usikker</option>
+        </select>
+      </label>
+      <label>Kontaktperson ved avreise<input type="text" name="departure_contact"></label>
+    </fieldset>
+
+    <fieldset class="span-2">
+      <legend>Foresatt / nødkontakt</legend>
+      <label>Navn på foresatt*<input type="text" name="guardian_name" required></label>
+      <label>Mobil foresatt*<input type="tel" name="guardian_phone" required></label>
+      <label>Nødkontakt navn<input type="text" name="emergency_name"></label>
+      <label>Nødkontakt telefon<input type="tel" name="emergency_phone"></label>
+    </fieldset>
+
+    <fieldset class="span-2">
+      <legend>Hensyn & helse (valgfritt)</legend>
+      <label>
+        Allergier eller behov for tilrettelegging
+        <textarea name="health_notes" rows="3" placeholder="F.eks. matallergi, medisiner, annet"></textarea>
+      </label>
+    </fieldset>
+
+    <fieldset class="span-2">
+      <legend>Samtykker</legend>
+      <label class="checkbox">
+        <input type="checkbox" name="consent_participation" required>
+        Jeg/foresatt samtykker til deltakelse og eventuell busstransport*
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" name="consent_photo">
+        Jeg samtykker til bruk av foto/video (frivillig)
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" name="consent_rules" required>
+        Jeg forplikter å følge 
+        <details class="popover">
+          <summary>regler</summary>
+          <div class="popover-card">
+            <strong>Regler for arrangementet</strong>
+            <ul>
+              <li>Rusmidler (alkohol, tobakk, snus, e‑sigaretter, narkotika) er <strong>ikke tillatt</strong>.</li>
+              <li>Vis respekt for andre deltakere, frivillige og ansatte.</li>
+              <li>Hærverk/ødeleggelse av eiendom politianmeldes og må erstattes.</li>
+              <li>Hold deg innenfor arrangementets områder og følg beskjeder fra vakter.</li>
+              <li>Følg busstider og instrukser ved av- og påstigning.</li>
+              <li>Informer om allergier/medisinering ved behov for oppfølging.</li>
+              <li>Foresatte skal være tilgjengelig på telefon under arrangementet.</li>
+              <li>Uakseptabel oppførsel kan medføre bortvisning og kontakt med foresatte.</li>
+            </ul>
+          </div>
+        </details>
+        for arrangement og buss*
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" name="consent_privacy" required>
+        Jeg har lest og aksepterer personvern (GDPR) – data lagres i maks 60 dager*
+      </label>
+    </fieldset>
+
+    <div class="actions span-2">
+      <button type="submit" class="btn-primary">Send påmelding</button>
+      <p class="help">* Obligatorisk · Aldersgrupper: 6–14 år (kl. 18–21) og 10–14 år (kl. 21–23)</p>
+    </div>
+  </form>
+</section>
+{% endblock %}
