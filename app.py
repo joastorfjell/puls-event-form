@@ -155,20 +155,30 @@ def send_email(row: Dict[str, str]):
         filename = f"registration-{row.get('timestamp','')}.csv" or "registration.csv"
         msg.add_attachment(attachment_content, maintype="text", subtype="csv", filename=filename)
 
-        with smtplib.SMTP(host, port, timeout=10) as server:
-            if os.getenv("SMTP_TLS", "true").lower() in {"1", "true", "yes", "on"}:
-                try:
-                    server.ehlo()
-                except Exception:
-                    pass
-                server.starttls()
-                try:
-                    server.ehlo()
-                except Exception:
-                    pass
-            if user and password:
-                server.login(user, password)
-            server.send_message(msg)
+        use_tls = os.getenv("SMTP_TLS", "true").lower() in {"1", "true", "yes", "on"}
+        use_ssl = os.getenv("SMTP_SSL", "").lower() in {"1", "true", "yes", "on"} or str(port) == "465"
+        if use_ssl and not use_tls:
+            app.logger.info("Sending email via SMTP_SSL to %s:%s", host, port)
+            with smtplib.SMTP_SSL(host, port, timeout=10) as server:
+                if user and password:
+                    server.login(user, password)
+                server.send_message(msg)
+        else:
+            app.logger.info("Sending email via SMTP with STARTTLS=%s to %s:%s", use_tls, host, port)
+            with smtplib.SMTP(host, port, timeout=10) as server:
+                if use_tls:
+                    try:
+                        server.ehlo()
+                    except Exception:
+                        pass
+                    server.starttls()
+                    try:
+                        server.ehlo()
+                    except Exception:
+                        pass
+                if user and password:
+                    server.login(user, password)
+                server.send_message(msg)
     except Exception as e:
         app.logger.warning("Email sending skipped/failed: %s", e)
 
