@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+import base64
 try:
     from dotenv import load_dotenv  # type: ignore
 except Exception:
@@ -120,11 +121,17 @@ def send_email(row: Dict[str, str]):
     user = os.getenv("SMTP_USER")
     password = os.getenv("SMTP_PASS")
     to_email = os.getenv("NOTIFY_EMAIL")
+    resend_key = os.getenv("RESEND_API_KEY")
+    resend_from = os.getenv("RESEND_FROM") or user or to_email
 
-    if not (host and port and to_email):
-        missing = [k for k, v in {"SMTP_HOST": host, "SMTP_PORT": port, "NOTIFY_EMAIL": to_email}.items() if not v]
-        app.logger.warning("Email not configured; missing: %s", ", ".join(missing))
-        return  # Not configured
+    # Only NOTIFY_EMAIL is required universally. SMTP settings are only required if RESEND is not configured.
+    if not to_email:
+        app.logger.warning("Email not configured; missing: NOTIFY_EMAIL")
+        return
+    if not resend_key and not (host and port):
+        missing = [k for k, v in {"SMTP_HOST": host, "SMTP_PORT": port}.items() if not v]
+        app.logger.warning("SMTP not configured; missing: %s (RESEND_API_KEY not set)", ", ".join(missing))
+        return
 
     subject = "Ny påmelding – Puls Musikkverksted"
 
@@ -135,7 +142,34 @@ def send_email(row: Dict[str, str]):
     # Build a one-line CSV attachment (header + row) for Excel friendliness
     csv_header = ",".join(FIELDNAMES)
     csv_row = ",".join([str(row.get(k, "")).replace("\n", " ") for k in FIELDNAMES])
-    attachment_content = f"{csv_header}\n{csv_row}\n".encode("utf-8")
+    attachment_bytes = f"{csv_header}\n{csv_row}\n".encode("utf-8")
+    attachment_b64 = base64.b64encode(attachment_bytes).decode("ascii")
+
+    # Prefer Resend API if configured
+    if resend_key:
+        try:
+            import requests
+            payload = {
+                "from": resend_from or "noreply@localhost",
+                "to": [to_email],
+                "subject": subject,
+                "text": body_text,
+                "attachments": [
+                    {
+                        "filename": f"registration-{row.get('timestamp','')}.csv" or "registration.csv",
+                        "content": attachment_b64,
+                        "content_type": "text/csv"
+                    }
+                ]
+            }
+            headers = {"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"}
+            resp = requests.post("https://api.resend.com/emails", json=payload, headers=headers, timeout=10)
+            if resp.status_code >= 300:
+                app.logger.warning("Resend email failed: %s %s", resp.status_code, resp.text)
+            return
+        except Exception as e:
+            app.logger.warning("Resend sending skipped/failed: %s", e)
+            # fall through to SMTP if configured
 
     try:
         import smtplib
@@ -153,7 +187,7 @@ def send_email(row: Dict[str, str]):
         msg.set_content(body_text)
 
         filename = f"registration-{row.get('timestamp','')}.csv" or "registration.csv"
-        msg.add_attachment(attachment_content, maintype="text", subtype="csv", filename=filename)
+        msg.add_attachment(attachment_bytes, maintype="text", subtype="csv", filename=filename)
 
         use_tls = os.getenv("SMTP_TLS", "true").lower() in {"1", "true", "yes", "on"}
         use_ssl = os.getenv("SMTP_SSL", "").lower() in {"1", "true", "yes", "on"} or str(port) == "465"
