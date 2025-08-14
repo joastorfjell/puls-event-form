@@ -122,6 +122,8 @@ def send_email(row: Dict[str, str]):
     to_email = os.getenv("NOTIFY_EMAIL")
 
     if not (host and port and to_email):
+        missing = [k for k, v in {"SMTP_HOST": host, "SMTP_PORT": port, "NOTIFY_EMAIL": to_email}.items() if not v]
+        app.logger.warning("Email not configured; missing: %s", ", ".join(missing))
         return  # Not configured
 
     subject = "Ny påmelding – Puls Musikkverksted"
@@ -141,8 +143,13 @@ def send_email(row: Dict[str, str]):
 
         msg = EmailMessage()
         msg["Subject"] = subject
-        msg["From"] = user or "noreply@localhost"
+        # For providers like Microsoft 365, the From should be the authenticated user mailbox
+        msg["From"] = user or to_email or "noreply@localhost"
         msg["To"] = to_email
+        # Let replies go to the participant's email if provided
+        participant_email = row.get("email", "").strip()
+        if participant_email:
+            msg["Reply-To"] = participant_email
         msg.set_content(body_text)
 
         filename = f"registration-{row.get('timestamp','')}.csv" or "registration.csv"
@@ -150,7 +157,15 @@ def send_email(row: Dict[str, str]):
 
         with smtplib.SMTP(host, port, timeout=10) as server:
             if os.getenv("SMTP_TLS", "true").lower() in {"1", "true", "yes", "on"}:
+                try:
+                    server.ehlo()
+                except Exception:
+                    pass
                 server.starttls()
+                try:
+                    server.ehlo()
+                except Exception:
+                    pass
             if user and password:
                 server.login(user, password)
             server.send_message(msg)
