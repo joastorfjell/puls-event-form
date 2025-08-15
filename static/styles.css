@@ -1,4 +1,4 @@
-:root{--bg:#0f0f10;--text:#f5f6f7;--muted:#aeb3b7;--card:#17181a;--border:#2b2d31;--accent:#EF5C28;--accent2:#ED6C30;--accent3:#DA2128}
+:root{--bg:#0f0f10;--text:#f5f6f7;--muted:#aeb3b7;--card:#17181a;--border:#2b2d31;--accent:#EF5C28;--accent2:#ED6C30;--accent3:#DA2128;--neon-purple:#9b5cff;--neon-pink:#ff4fd8;--neon-cyan:#52e8ff}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
 .container{width:min(960px,92vw);margin:0 auto;padding:20px}
 .site-header{border-bottom:1px solid var(--border);background:linear-gradient(90deg,#121315,transparent)}
@@ -42,3 +42,67 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 .popover-card strong{display:block;margin-bottom:6px}
 .popover-card ul{margin:6px 0 0 18px;color:var(--text)}
 .popover-card li{margin:6px 0}
+
+/* Disco theme inspired by poster */
+.theme-disco .site-header{background:linear-gradient(90deg,rgba(22,16,32,.8),rgba(16,16,20,.2));border-color:#221b33}
+.theme-disco .logo-circle{background:radial-gradient(ellipse at 30% 30%,var(--neon-pink),var(--neon-purple))}
+.theme-disco main.container{position:relative}
+.theme-disco main.container::before,
+.theme-disco main.container::after{content:"";position:absolute;inset:auto;pointer-events:none;filter:blur(0.2px)}
+.theme-disco main.container::before{top:-20px;right:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(155,92,255,.45),transparent 65%), repeating-linear-gradient(60deg,transparent 0 10px,rgba(155,92,255,.1) 10px 20px);box-shadow:0 0 40px 10px rgba(155,92,255,.25)}
+.theme-disco main.container::after{bottom:-10px;left:-20px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 60% 60%,rgba(255,79,216,.35),transparent 65%), repeating-linear-gradient(-60deg,transparent 0 10px,rgba(255,79,216,.08) 10px 20px);box-shadow:0 0 40px 10px rgba(255,79,216,.2)}
+
+.neon-title{font-size:clamp(26px,4vw,40px);letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.6),0 0 14px var(--neon-purple),0 0 26px var(--neon-purple),0 0 46px var(--neon-pink)}
+.theme-disco .card{background:
+  radial-gradient(ellipse at 20% -10%,rgba(155,92,255,.10),transparent 60%),
+  radial-gradient(ellipse at 120% 10%,rgba(255,79,216,.08),transparent 60%),
+  var(--card);
+  border-color:#2a2144;
+  box-shadow:0 10px 30px rgba(0,0,0,.4), 0 0 0 1px rgba(155,92,255,.08) inset}
+
+.badges{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 10px}
+.badge{border:1px solid rgba(155,92,255,.45);color:#fff;background:rgba(14,10,22,.6);padding:6px 10px;border-radius:8px;font-weight:700;letter-spacing:.03em;box-shadow:0 0 10px rgba(155,92,255,.25), inset 0 0 12px rgba(155,92,255,.08)}
+.badge.pink{border-color:rgba(255,79,216,.45);box-shadow:0 0 10px rgba(255,79,216,.25), inset 0 0 12px rgba(255,79,216,.08)}
+
+/* Neon button to match accents */
+.theme-disco .btn-primary{
+  /* Return to warm orange gradient from earlier theme */
+  background:linear-gradient(90deg,var(--accent3),var(--accent2) 50%,var(--accent));
+  color:#fff;
+  /* Create a readable black outline around the white text */
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0 0 8px rgba(0,0,0,.45);
+  border:1px solid rgba(0,0,0,.5);
+  box-shadow:0 10px 18px rgba(0,0,0,.35), inset 0 0 10px rgba(255,255,255,.08);
+}
+.theme-disco .btn-primary:hover{filter:brightness(1.05) saturate(1.05)}
+.theme-disco input:focus, .theme-disco select:focus, .theme-disco textarea:focus{border-color:var(--neon-purple);box-shadow:0 0 0 3px color-mix(in oklab,var(--neon-purple) 35%, transparent)}
+
+/* Disco framing for fieldsets */
+.theme-disco fieldset{
+  position:relative;
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:14px;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(135deg, rgba(155,92,255,.75), rgba(255,79,216,.6) 40%, rgba(82,232,255,.6)) border-box;
+  box-shadow:0 0 0 1px rgba(155,92,255,.08) inset, 0 10px 22px rgba(0,0,0,.28);
+}
+.theme-disco fieldset::after{
+  content:"";
+  position:absolute;bottom:-1px;right:12px;height:3px;width:96px;border-radius:3px;
+  background:linear-gradient(90deg,var(--neon-pink),var(--neon-purple));opacity:.7;
+  filter:drop-shadow(0 0 6px rgba(155,92,255,.5));
+}
+.theme-disco legend{
+  padding:2px 10px;margin-left:8px;
+  font-weight:800;letter-spacing:.04em;color:#fff;
+  background:#0e0a16;border:1px solid rgba(155,92,255,.45);border-radius:999px;
+  text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 0 10px rgba(155,92,255,.35);
+  box-shadow:inset 0 0 12px rgba(155,92,255,.12),0 0 18px rgba(155,92,255,.18);
+}

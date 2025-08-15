@@ -1,15 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 <section class="card">
-  <h2>Meld deg på</h2>
+  <h2 class="neon-title">Back 2 School Disco</h2>
+  <div class="badges">
+    <span class="badge">Lørdag 16. august</span>
+    <span class="badge pink">18:00–23:00</span>
+    <span class="badge">Inngang 50,-</span>
+    <span class="badge pink">DJ</span>
+  </div>
   <div class="event-info">
     <p>
-      Velkommen til ungdomskveld på Puls Musikkverksted! Buss går fra <strong>Amfi Narvik</strong> kl.
-      <strong>17:15</strong> til Puls Musikkverksted. Retur kl. <strong>21:00</strong> og <strong>23:00</strong>.
+      Velkommen til ungdomskveld på Puls Musikkverksted!
     </p>
     <ul>
-      <li>Aldersgrupper: <strong>6–14 år</strong> (kl. 18–21) og <strong>10–14 år</strong> (kl. 21–23)</li>
-      <li>Sted: Puls Musikkverksted, Ballangen</li>
+      <li><strong>Dato:</strong> Lørdag 16. august</li>
+      <li><strong>Tid:</strong> 18:00–23:00</li>
+      <li><strong>Sted:</strong> Puls Musikkverksted, Bjørkåsveien 18 E (Ballangen)</li>
+      <li><strong>Inngang:</strong> 50,-</li>
+      <li><strong>Alder:</strong> 6–14 år (10+ fra kl. 21:00)</li>
+      <li><strong>DJ</strong></li>
+      <li>Salg av snacks, mat og drikke</li>
       <li>Ta kontakt ved behov for tilrettelegging eller allergier</li>
     </ul>
   </div>
@@ -24,26 +34,6 @@
       {# Kommune fjernet #}
     </fieldset>
 
-    <fieldset class="span-2">
-      <legend>Transport</legend>
-      <p class="help">Buss går fra <strong>Amfi Narvik</strong> kl. <strong>17:15</strong> til Puls Musikkverksted. Retur kl. <strong>21:00</strong> og <strong>23:00</strong>.</p>
-      <label>Avreisested*
-        <select name="departure_from" required>
-          <option value="">Velg…</option>
-          <option>Amfi Narvik</option>
-          <option>Kommer selv</option>
-        </select>
-      </label>
-      <label>Retur med buss*
-        <select name="return_bus" required>
-          <option value="">Velg…</option>
-          <option>Ja</option>
-          <option>Nei</option>
-          <option>Usikker</option>
-        </select>
-      </label>
-      <label>Kontaktperson ved avreise<input type="text" name="departure_contact"></label>
-    </fieldset>
 
     <fieldset class="span-2">
       <legend>Foresatt / nødkontakt</legend>
@@ -65,7 +55,7 @@
       <legend>Samtykker</legend>
       <label class="checkbox">
         <input type="checkbox" name="consent_participation" required>
-        Jeg/foresatt samtykker til deltakelse og eventuell busstransport*
+        Jeg/foresatt samtykker til deltakelse*
       </label>
       <label class="checkbox">
         <input type="checkbox" name="consent_photo">
@@ -83,14 +73,14 @@
               <li>Vis respekt for andre deltakere, frivillige og ansatte.</li>
               <li>Hærverk/ødeleggelse av eiendom politianmeldes og må erstattes.</li>
               <li>Hold deg innenfor arrangementets områder og følg beskjeder fra vakter.</li>
-              <li>Følg busstider og instrukser ved av- og påstigning.</li>
+              <li>Følg tider og instrukser fra arrangør.</li>
               <li>Informer om allergier/medisinering ved behov for oppfølging.</li>
               <li>Foresatte skal være tilgjengelig på telefon under arrangementet.</li>
               <li>Uakseptabel oppførsel kan medføre bortvisning og kontakt med foresatte.</li>
             </ul>
           </div>
         </details>
-        for arrangement og buss*
+        for arrangementet*
       </label>
       <label class="checkbox">
         <input type="checkbox" name="consent_privacy" required>

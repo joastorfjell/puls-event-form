@@ -1,1 +1,1 @@
-timestamp,participant_name,age,phone,email,school,departure_from,return_bus,departure_contact,guardian_name,guardian_phone,emergency_name,emergency_phone,health_notes,consent_participation,consent_photo,consent_rules,consent_privacy,ip,user_agent
+timestamp,participant_name,age,phone,email,school,guardian_name,guardian_phone,emergency_name,emergency_phone,health_notes,consent_participation,consent_photo,consent_rules,consent_privacy,ip,user_agent
